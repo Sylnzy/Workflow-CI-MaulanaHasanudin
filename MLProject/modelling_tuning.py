@@ -8,6 +8,7 @@ import argparse
 import json
 import logging
 import warnings
+from contextlib import nullcontext
 
 import joblib
 import matplotlib
@@ -140,7 +141,7 @@ def main():
     )
 
     parent_run = mlflow.active_run()
-    run_ctx = mlflow.start_run(run_name="ci_automated_training", nested=bool(parent_run))
+    run_ctx = nullcontext(parent_run) if parent_run else mlflow.start_run(run_name="ci_automated_training")
 
     with run_ctx:
         X_train, X_test, y_train, y_test = load_preprocessed_data(args.data_path, args.test_size)
