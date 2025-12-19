@@ -141,7 +141,10 @@ def main():
     )
 
     mlflow.set_experiment("crop_recommendation_ci")
-    with mlflow.start_run(run_name="ci_automated_training"):
+
+    # If running under MLflow Project, a parent run exists; use nested run to avoid ID conflicts
+    parent_run = mlflow.active_run()
+    with mlflow.start_run(run_name="ci_automated_training", nested=bool(parent_run)):
         X_train, X_test, y_train, y_test = load_preprocessed_data(args.data_path, args.test_size)
 
         mlflow.log_param("data_path", args.data_path)
