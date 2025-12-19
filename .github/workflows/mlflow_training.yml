@@ -76,7 +76,7 @@ jobs:
           ls -la artifacts_output
 
       - name: Upload artifacts to GitHub
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: crop-model-${{ github.run_number }}
           path: MLProject/artifacts_output/
