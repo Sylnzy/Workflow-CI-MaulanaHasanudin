@@ -144,7 +144,13 @@ def main():
     mlflow.set_experiment("crop_recommendation_ci")
 
     parent_run = mlflow.active_run()
-    run_ctx = mlflow.start_run(run_name="ci_automated_training") if parent_run is None else nullcontext(parent_run)
+    env_run_id = os.getenv("MLFLOW_RUN_ID")
+
+    # If invoked via `mlflow run`, MLFLOW_RUN_ID is set. Use nested run to avoid ID mismatch.
+    if env_run_id or parent_run:
+        run_ctx = mlflow.start_run(run_name="ci_automated_training", nested=True)
+    else:
+        run_ctx = mlflow.start_run(run_name="ci_automated_training")
     with run_ctx:
         X_train, X_test, y_train, y_test = load_preprocessed_data(args.data_path, args.test_size)
 
