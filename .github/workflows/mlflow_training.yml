@@ -61,11 +61,14 @@ jobs:
               working-directory: MLProject
               run: |
                   RUN_ID=$(find mlruns -type f -name "meta.yaml" | sort | tail -n 1 | xargs dirname | xargs basename)
-                  EXP_ID=$(find mlruns -maxdepth 1 -type d -not -name mlruns -not -name 0 | head -n 1 | xargs basename || echo 0)
+                  EXP_ID=$(find mlruns -type f -name "meta.yaml" | sort | tail -n 1 | awk -F/ '{print $(NF-2)}')
+                  MODEL_PATH=$(find mlruns -type d -path "*/artifacts/model" | sort | tail -n 1)
                   echo "RUN_ID=$RUN_ID" >> $GITHUB_OUTPUT
                   echo "EXP_ID=$EXP_ID" >> $GITHUB_OUTPUT
+                  echo "MODEL_PATH=$MODEL_PATH" >> $GITHUB_OUTPUT
                   echo "Run ID: $RUN_ID"
                   echo "Experiment ID: $EXP_ID"
+                  echo "Model path: $MODEL_PATH"
 
             - name: Collect artifacts
               working-directory: MLProject
@@ -88,11 +91,10 @@ jobs:
             - name: Build Docker Model
               working-directory: MLProject
               run: |
-                  EXP_ID=${{ steps.get_run.outputs.EXP_ID }}
-                  RUN_ID=${{ steps.get_run.outputs.RUN_ID }}
-                  MODEL_URI="mlruns/${EXP_ID}/${RUN_ID}/artifacts/model"
+                  MODEL_URI=${{ steps.get_run.outputs.MODEL_PATH }}
                   echo "Building docker image from ${MODEL_URI}"
-                  mlflow models build-docker -m "${MODEL_URI}" -n "${{ secrets.DOCKER_USERNAME }}/crop-recommendation-model:latest"
+                  if [ -z "$MODEL_URI" ]; then echo "Model path not found"; exit 1; fi
+                  mlflow models build-docker -m "$MODEL_URI" -n "${{ secrets.DOCKER_USERNAME }}/crop-recommendation-model:latest"
 
             - name: Log in to Docker Hub
               uses: docker/login-action@v2
