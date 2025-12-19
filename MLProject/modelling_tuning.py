@@ -9,7 +9,6 @@ import json
 import logging
 import os
 import warnings
-from contextlib import nullcontext
 
 import joblib
 import matplotlib
@@ -144,9 +143,13 @@ def main():
     mlflow.set_experiment("crop_recommendation_ci")
 
     env_run_id = os.getenv("MLFLOW_RUN_ID")
+
+    # Align with MLflow Project parent: end any active run, then attach to parent run if provided
+    if mlflow.active_run():
+        mlflow.end_run()
+
     if env_run_id:
-        mlflow.start_run(run_id=env_run_id)
-        run_ctx = nullcontext()
+        run_ctx = mlflow.start_run(run_id=env_run_id)
     else:
         run_ctx = mlflow.start_run(run_name="ci_automated_training")
 
