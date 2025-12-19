@@ -50,8 +50,9 @@ jobs:
         working-directory: MLProject
         env:
           MLFLOW_TRACKING_URI: file:./mlruns
+          MLFLOW_NO_CONDA: "true"
         run: |
-          mlflow run . --no-conda -P n_estimators=200 -P max_depth=20 -P test_size=0.2 -P data_path=crop_preprocessing.csv
+          mlflow run . -P n_estimators=200 -P max_depth=20 -P test_size=0.2 -P data_path=crop_preprocessing.csv
 
       - name: Get latest MLflow run_id
         id: get_run
