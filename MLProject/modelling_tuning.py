@@ -9,6 +9,7 @@ import json
 import logging
 import os
 import warnings
+from contextlib import nullcontext
 
 import joblib
 import matplotlib
@@ -142,9 +143,9 @@ def main():
 
     mlflow.set_experiment("crop_recommendation_ci")
 
-    # If running under MLflow Project, a parent run exists; use nested run to avoid ID conflicts
     parent_run = mlflow.active_run()
-    with mlflow.start_run(run_name="ci_automated_training", nested=bool(parent_run)):
+    run_ctx = mlflow.start_run(run_name="ci_automated_training") if parent_run is None else nullcontext(parent_run)
+    with run_ctx:
         X_train, X_test, y_train, y_test = load_preprocessed_data(args.data_path, args.test_size)
 
         mlflow.log_param("data_path", args.data_path)
