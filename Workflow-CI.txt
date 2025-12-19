@@ -1,0 +1,24 @@
+GitHub Repository Link (Kriteria 3):
+https://github.com/Sylnzy/Workflow-CI-MaulanaHasanudin
+
+Repository Visibility: PUBLIC
+
+MLflow Project Structure: yes
+GitHub Actions Workflow: yes
+Automated Training: yes
+Artifact Storage: yes (GitHub Actions Artifacts)
+Docker Deployment: yes (Docker Hub via mlflow models build-docker)
+
+Docker Hub Repository:
+https://hub.docker.com/r/<docker_username>/crop-recommendation-model
+
+Docker Pull Command:
+docker pull <docker_username>/crop-recommendation-model:latest
+
+Latest Workflow Run:
+https://github.com/Sylnzy/Workflow-CI-MaulanaHasanudin/actions
+
+Achievement Level: ADVANCED (4/4 points)
+
+Author: Maulana Hasanudin
+Date: 2025-12-19

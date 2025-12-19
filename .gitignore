@@ -1,0 +1,38 @@
+# MLflow
+mlruns/
+mlartifacts/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.pkl
+*.h5
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Artifacts
+*.png
+*.jpg
+*.json
+artifacts_output/
+
+# Env
+.env
+venv/
+.venv/
+
+# Keep specific artifacts if needed
+!MLProject/confusion_matrix.png
+!MLProject/feature_importance.png

@@ -1,0 +1,27 @@
+name: crop_recommendation_mlproject
+
+conda_env: conda.yaml
+
+entry_points:
+  main:
+    parameters:
+      data_path:
+        type: string
+        default: "crop_preprocessing.csv"
+      n_estimators:
+        type: int
+        default: 300
+      max_depth:
+        type: int
+        default: 30
+      test_size:
+        type: float
+        default: 0.2
+    command: "python modelling_tuning.py --data_path {data_path} --n_estimators {n_estimators} --max_depth {max_depth} --test_size {test_size}"
+
+  quick_train:
+    parameters:
+      data_path:
+        type: string
+        default: "crop_preprocessing.csv"
+    command: "python modelling_tuning.py --data_path {data_path} --n_estimators 100 --max_depth 20 --test_size 0.2"
