@@ -7,9 +7,7 @@ Description: CLI-enabled training script for MLflow Project CI/CD.
 import argparse
 import json
 import logging
-import os
 import warnings
-from contextlib import nullcontext
 
 import joblib
 import matplotlib
@@ -143,17 +141,11 @@ def main():
 
     mlflow.set_experiment("crop_recommendation_ci")
 
-    parent_run = mlflow.active_run()
-    env_run_id = os.getenv("MLFLOW_RUN_ID")
+    # Ensure no lingering run; always start fresh for CI
+    if mlflow.active_run():
+        mlflow.end_run()
 
-    # If mlflow run (CLI) started a run, re-attach to that run ID; else start a new one.
-    if env_run_id:
-        run_ctx = mlflow.start_run(run_id=env_run_id)
-    elif parent_run:
-        run_ctx = nullcontext()
-    else:
-        run_ctx = mlflow.start_run(run_name="ci_automated_training")
-    with run_ctx:
+    with mlflow.start_run(run_name="ci_automated_training"):
         X_train, X_test, y_train, y_test = load_preprocessed_data(args.data_path, args.test_size)
 
         mlflow.log_param("data_path", args.data_path)
