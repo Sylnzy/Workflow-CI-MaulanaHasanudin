@@ -53,7 +53,7 @@ jobs:
           MLFLOW_NO_CONDA: "true"
           MLFLOW_ENV_MANAGER: local
         run: |
-          mlflow run . --env-manager=local -P n_estimators=200 -P max_depth=20 -P test_size=0.2 -P data_path=crop_preprocessing.csv
+          mlflow run . --new --env-manager=local -P n_estimators=200 -P max_depth=20 -P test_size=0.2 -P data_path=crop_preprocessing.csv
 
       - name: Get latest MLflow run_id
         id: get_run
