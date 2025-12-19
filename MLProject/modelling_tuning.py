@@ -139,14 +139,9 @@ def main():
         args.test_size,
     )
 
-    mlflow.set_experiment("crop_recommendation_ci")
 
     parent_run = mlflow.active_run()
-    run_ctx = (
-        mlflow.start_run(run_name="ci_automated_training", nested=True)
-        if parent_run
-        else mlflow.start_run(run_name="ci_automated_training")
-    )
+        run_ctx = mlflow.start_run(run_name="ci_automated_training", nested=bool(parent_run))
 
     with run_ctx:
         X_train, X_test, y_train, y_test = load_preprocessed_data(args.data_path, args.test_size)
