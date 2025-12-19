@@ -146,9 +146,10 @@ def main():
     parent_run = mlflow.active_run()
     env_run_id = os.getenv("MLFLOW_RUN_ID")
 
-    # If invoked via `mlflow run`, MLFLOW_RUN_ID is set. Use nested run to avoid ID mismatch.
+    # If mlflow run already created a parent run (env MLFLOW_RUN_ID or active run), reuse it
+    # to avoid run ID mismatch. Only start a new run when none exists.
     if env_run_id or parent_run:
-        run_ctx = mlflow.start_run(run_name="ci_automated_training", nested=True)
+        run_ctx = nullcontext()
     else:
         run_ctx = mlflow.start_run(run_name="ci_automated_training")
     with run_ctx:
