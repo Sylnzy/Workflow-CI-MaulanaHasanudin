@@ -1,1 +1,9 @@
+GitHub Repository Link (Kriteria 3):
 https://github.com/Sylnzy/Workflow-CI-MaulanaHasanudin
+
+Docker hub :
+https://hub.docker.com/r/sylnz/crop-recommendation-model
+
+
+Author: Maulana Hasanudin
+Date: 2025-12-19
